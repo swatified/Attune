@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     
     // Navigate to home screen after 3 seconds
     Timer(const Duration(seconds: 3), () {
-      //Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/home');
     });
   }
 
