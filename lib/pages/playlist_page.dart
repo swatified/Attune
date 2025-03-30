@@ -227,21 +227,56 @@ class PlaylistPage extends StatelessWidget {
       
       if (playlistUrl != null) {
         print('🎸 PlaylistPage: Playlist created successfully: $playlistUrl');
-        // Show success dialog with option to open in Spotify
+        // Show success dialog with option to open in Spotify and copy link
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Playlist Created!'),
-            content: const Text(
-              'Your playlist has been created on Spotify. Would you like to open it?',
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Your playlist has been created on Spotify.',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Link to your playlist:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    playlistUrl,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
             actions: [
+              TextButton(
+                onPressed: () {
+                  print('🎸 PlaylistPage: User copied playlist link');
+                  Clipboard.setData(ClipboardData(text: playlistUrl));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Playlist URL copied to clipboard')),
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text('Copy Link'),
+              ),
               TextButton(
                 onPressed: () {
                   print('🎸 PlaylistPage: User chose not to open playlist');
                   Navigator.pop(context);
                 },
-                child: const Text('Later'),
+                child: const Text('Close'),
               ),
               TextButton(
                 onPressed: () async {
@@ -252,7 +287,7 @@ class PlaylistPage extends StatelessWidget {
                   
                   // Try multiple URI formats for maximum compatibility
                   final spotifyAppUri = Uri.parse('spotify:playlist:$playlistId'); // Direct Spotify app URI scheme
-                  final webUri = Uri.parse('https://open.spotify.com/playlist/$playlistId'); // Web URL as fallback
+                  final webUri = Uri.parse(playlistUrl); // Web URL as fallback
                   
                   print('🎸 PlaylistPage: Attempting to launch Spotify app URI: $spotifyAppUri');
                   try {
@@ -280,10 +315,13 @@ class PlaylistPage extends StatelessWidget {
                   } catch (e) {
                     print('🎸 PlaylistPage: Error launching Spotify: $e');
                     
-                    // Add to clipboard as fallback
+                    // Add to clipboard as fallback and show a helpful message
                     await Clipboard.setData(ClipboardData(text: playlistUrl));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Could not open Spotify app, but URL has been copied to clipboard')),
+                      const SnackBar(
+                        content: Text('Could not open Spotify app, but URL has been copied to clipboard'),
+                        duration: Duration(seconds: 3),
+                      ),
                     );
                   }
                 },
