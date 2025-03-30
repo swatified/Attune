@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     
     // Navigate to home screen after 3 seconds
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacementNamed('/home');
+      //Navigator.of(context).pushReplacementNamed('/home');
     });
   }
 
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFEF9E7), // Light cream background to match your mascot image
+      backgroundColor: Color(0xFFFEF9E7),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,11 +54,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               scale: _animation,
               child: Image.asset(
                 'assets/images/mascot.png',
-                height: 150,
-                width: 150,
+                height: 160,
+                width: 160,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 0),
             // App name with custom font
             FadeTransition(
               opacity: _animation,
@@ -66,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 'Attune',
                 style: TextStyle(
                   fontFamily: 'LilitaOne',
-                  fontSize: 42,
+                  fontSize: 46,
                   fontWeight: FontWeight.normal,
                   color: Color(0xFF333333),
                 ),
